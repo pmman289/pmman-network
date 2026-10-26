@@ -1,0 +1,56 @@
+name: pmman-network
+
+services:
+  postgres:
+    image: postgres:16.4-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${PMMAN_POSTGRES_DB:-pmman}
+      POSTGRES_USER: ${PMMAN_POSTGRES_USER:-pmman}
+      POSTGRES_PASSWORD: ${PMMAN_POSTGRES_PASSWORD:?PMMAN_POSTGRES_PASSWORD is required}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -p 5432 -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+    ports:
+      - "127.0.0.1:${PMMAN_POSTGRES_PORT:-55432}:5432"
+    volumes:
+      - pmman-postgres-data:/var/lib/postgresql/data
+    networks:
+      - pmman-control
+
+  master:
+    image: ${PMMAN_MASTER_IMAGE:-pmman-network/master:local}
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      PMMAN_DATABASE_URL: postgres://${PMMAN_POSTGRES_USER:-pmman}:${PMMAN_POSTGRES_PASSWORD}@postgres:5432/${PMMAN_POSTGRES_DB:-pmman}
+      PMMAN_MASTER_LISTEN: 0.0.0.0:8787
+      PMMAN_TRUSTED_PROXY_IPS: ${PMMAN_TRUSTED_PROXY_IPS:-}
+      PMMAN_ADMIN_PASSWORD: ${PMMAN_ADMIN_PASSWORD:?PMMAN_ADMIN_PASSWORD is required}
+      PMMAN_NODE_RESOURCE_DIR: /var/lib/pmman/node-resources
+      PMMAN_CLIENT_RELEASE_DIR: /var/lib/pmman/client-releases
+      PMMAN_GEOSITE_DIR: /var/lib/pmman/geosite
+      PMMAN_DIAGNOSTIC_DIR: /var/lib/pmman/diagnostics
+      PMMAN_CLIENT_RELEASE_PRIVATE_KEY_FILE: /run/secrets/client_release_key
+    ports:
+      - "127.0.0.1:${PMMAN_MASTER_PORT:-8787}:8787"
+    volumes:
+      - ${PMMAN_DATA_ROOT:-./data}/node-resources:/var/lib/pmman/node-resources
+      - ${PMMAN_DATA_ROOT:-./data}/client-releases:/var/lib/pmman/client-releases
+      - ${PMMAN_DATA_ROOT:-./data}/geosite:/var/lib/pmman/geosite
+      - ${PMMAN_DATA_ROOT:-./data}/diagnostics:/var/lib/pmman/diagnostics
+      - ${PMMAN_CLIENT_RELEASE_KEY_FILE:-./client-release.key}:/run/secrets/client_release_key:ro
+    networks:
+      - pmman-control
+
+networks:
+  pmman-control:
+    name: ${PMMAN_COMPOSE_NETWORK_NAME:-pmman-network-control}
+
+volumes:
+  pmman-postgres-data:
+    name: ${PMMAN_POSTGRES_VOLUME_NAME:-pmman-network-postgres-data}

@@ -1,0 +1,18 @@
+{
+  "listen": ["0.0.0.0:53", "[::]:53"],
+  "domestic_upstreams": ["223.5.5.5:53", "119.29.29.29:53"],
+  "foreign_upstreams": ["1.1.1.1:53", "8.8.8.8:53"],
+  "domestic_rules": ["/etc/pmmandns/domestic_extra.txt"],
+  "foreign_rules": ["/etc/pmmandns/foreign_extra.txt"],
+  "geosite_file": "/etc/pmmandns/geosite.dat",
+  "geosite_domestic": "cn",
+  "geosite_foreign": "geolocation-!cn",
+  "default_group": "foreign",
+  "timeout_ms": 1200,
+  "cache_size": 4096,
+  "max_ttl": 86400,
+  "negative_ttl": 30,
+  "local_upstream": "127.0.0.1:1053",
+  "local_suffixes": ["lan", "local"],
+  "dn42_upstreams": ["172.20.0.53:53"]
+}

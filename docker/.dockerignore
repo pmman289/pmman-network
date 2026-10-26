@@ -1,0 +1,14 @@
+.git
+.gitignore
+target
+artifacts
+dist
+node_modules
+server/target/debug
+server/target/release/*
+server/target/*/debug
+!server/target/x86_64-unknown-linux-musl/
+!server/target/x86_64-unknown-linux-musl/release/
+!server/target/x86_64-unknown-linux-musl/release/pmman-control-plane
+server/admin-dist/*.map
+*.log

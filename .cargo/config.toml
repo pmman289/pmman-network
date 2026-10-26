@@ -1,0 +1,5 @@
+[target.x86_64-pc-windows-msvc]
+# The standalone installer must run on a clean Windows installation.  Link
+# the MSVC CRT statically so the sidecar service does not require a separately
+# installed Visual C++ Redistributable before the client can start.
+rustflags = ["-C", "target-feature=+crt-static"]

@@ -1,0 +1,35 @@
+[package]
+name = "pmman-control-plane"
+version = "0.0.1-alpha"
+edition = "2021"
+
+[dependencies]
+pmman-protocol = { path = "../protocol" }
+axum = { version = "0.8", features = ["multipart"] }
+base64 = "0.22"
+chrono = { version = "0.4", features = ["serde"] }
+ed25519-dalek = "2"
+hmac = "0.12"
+semver = "1"
+include_dir = "0.7"
+postgres = { version = "0.19", features = ["with-chrono-0_4", "with-uuid-1"] }
+rusqlite = { version = "0.32", features = ["bundled"], optional = true }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+sha2 = "0.10"
+tokio = { version = "1", features = ["full"] }
+tokio-util = { version = "0.7", features = ["io"] }
+ureq = { version = "3", features = ["json"] }
+uuid = { version = "1", features = ["serde", "v4"] }
+
+[dev-dependencies]
+tokio = { version = "1", features = ["test-util"] }
+tower = "0.5"
+
+[features]
+legacy-migration = ["dep:rusqlite"]
+
+[[bin]]
+name = "pmman-migrate"
+path = "src/bin/pmman-migrate.rs"
+required-features = ["legacy-migration"]

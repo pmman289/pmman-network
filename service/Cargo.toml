@@ -1,0 +1,21 @@
+[package]
+name = "pmman-network-service"
+version = "0.1.22-alpha"
+edition = "2021"
+
+[dependencies]
+pmman-protocol = { path = "../protocol" }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+tokio = { version = "1", features = ["full"] }
+ureq = { version = "3", features = ["json"] }
+sha2 = "0.10"
+semver = "1"
+chrono = "0.4"
+uuid = { version = "1", features = ["v4"] }
+windows-sys = { version = "0.59", features = ["Win32_Foundation", "Win32_Security_Authorization", "Win32_Security", "Win32_Security_Cryptography", "Win32_System_Memory", "Win32_System_Threading", "Win32_System_Services", "Win32_Networking_WinSock", "Win32_NetworkManagement", "Win32_NetworkManagement_IpHelper", "Win32_NetworkManagement_Ndis"] }
+
+[target.'cfg(windows)'.dependencies]
+# Optional UPnP IGD discovery and UDP port mapping. The service treats every
+# gateway/HTTP failure as non-fatal and keeps the authenticated relay path.
+igd = "0.12"

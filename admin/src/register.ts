@@ -1,0 +1,11 @@
+import { createApp } from 'vue';
+import ElementPlus from 'element-plus';
+import zhCn from 'element-plus/es/locale/lang/zh-cn';
+import 'element-plus/dist/index.css';
+import 'element-plus/theme-chalk/dark/css-vars.css';
+import RegisterView from './views/RegisterView.vue';
+const preference = window.matchMedia('(prefers-color-scheme: dark)');
+const updateTheme = () => document.documentElement.classList.toggle('dark', preference.matches);
+updateTheme();
+preference.addEventListener('change', updateTheme);
+createApp(RegisterView).use(ElementPlus, { locale: zhCn }).mount('#app');

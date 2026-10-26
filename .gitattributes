@@ -1,0 +1,5 @@
+* text=auto
+
+# These inputs are SHA-256 validated; Windows checkout must not rewrite them.
+/service/resources/cnipgen/* text eol=lf
+/tools/cnipgen/*.py text eol=lf

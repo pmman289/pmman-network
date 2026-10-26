@@ -1,0 +1,52 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "Pmman Network",
+  "version": "0.1.22-alpha",
+  "identifier": "tech.pmman.network-client",
+  "build": {
+    "beforeDevCommand": "pnpm dev",
+    "beforeBuildCommand": "pnpm build",
+    "frontendDist": "../dist"
+  },
+  "app": {
+    "windows": [
+      {
+        "title": "Pmman Network",
+        "width": 1040,
+        "height": 760,
+        "minWidth": 760,
+        "minHeight": 620
+      }
+    ],
+    "security": {
+      "csp": null
+    }
+  },
+  "bundle": {
+    "active": true,
+    "externalBin": ["binaries/pmman-network-service"],
+    "resources": {
+      "../config/pmman-client.json": "pmman-client.json",
+      "../vendor/windows/wireguard-amd64-0.5.3.msi": "runtime/wireguard-amd64-0.5.3.msi",
+      "../vendor/windows/MicrosoftEdgeWebView2RuntimeInstallerX64.exe": "runtime/MicrosoftEdgeWebView2RuntimeInstallerX64.exe"
+    },
+    "targets": ["nsis"],
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ],
+    "windows": {
+      "webviewInstallMode": {
+        "type": "skip"
+      },
+      "nsis": {
+        "installMode": "perMachine",
+        "installerHooks": "windows/installer-hooks.nsh",
+        "compression": "lzma"
+      }
+    }
+  }
+}
